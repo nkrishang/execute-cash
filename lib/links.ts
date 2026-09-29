@@ -1,0 +1,22 @@
+/** The docs, by page. Every docs link on the site comes from here. */
+export const DOCS = {
+  home: "/docs",
+  quickstart: "/docs/quickstart",
+  authentication: "/docs/api/authentication",
+  apiKey: "/docs/api/authentication#api-keys",
+  clientId: "/docs/api/authentication#client-ids",
+  createAddress: "/docs/api/create-address",
+  getAddress: "/docs/api/get-address",
+  addressStatus: "/docs/api/address-status",
+  chains: "/docs/api/chains",
+  webhooks: "/docs/api/webhooks",
+  errors: "/docs/api/errors",
+  guides: "/docs/guides",
+  payments: "/docs/guides/stablecoin-payments",
+  morpho: "/docs/guides/earn-with-morpho",
+  spark: "/docs/guides/earn-with-spark",
+  aave: "/docs/guides/earn-with-aave",
+  howItWorks: "/docs/how-it-works",
+  supportedChains: "/docs/supported-chains",
+  openSource: "/docs/open-source",
+} as const;

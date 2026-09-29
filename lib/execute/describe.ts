@@ -1,0 +1,72 @@
+import { functionItem } from "./derive";
+import { chainName, formatAmount, short, tokenOf } from "./format";
+import { knownContract, type Known, type Theme } from "./known";
+import type { Chain, ChainToken, ExecutableAddress } from "./types";
+
+/** What an executable address does, in a sentence: "Send 1,000.00 USDC. It deposits into Morpho." */
+export type Story = {
+  /** The token, as the API lists it; null if it doesn't (the amount is then in base units). */
+  token: ChainToken | null;
+  amount: string;
+  symbol: string;
+  decimals: number | null;
+  chain: string;
+  /** What the address does to `object`: "deposits into". */
+  verb: string;
+  object: string;
+  /** Who the main call is to, when we know them. */
+  main: Known | null;
+  theme: Theme | undefined;
+  /** Each call's function name, in order. */
+  functions: string[];
+};
+
+/** Calls that only set up the main one. */
+const SETUP = new Set(["approve", "increaseAllowance", "permit"]);
+
+/** How a call reads, by its function name. The first match wins. */
+const VERBS: [RegExp, string][] = [
+  [/^depositForBurn/, "bridges through"],
+  [/^(deposit|supply|mint)/, "deposits into"],
+  [/^stake/, "stakes into"],
+  [/^(withdraw|redeem)/, "withdraws from"],
+  [/^repay/, "repays"],
+  [/^(swap|exactInput|exactOutput)/, "swaps on"],
+];
+
+export function describe(exe: ExecutableAddress, chains: Chain[]): Story {
+  const { intent } = exe;
+  const token = tokenOf(chains, intent.chainId, intent.token);
+  const functions = intent.calls.map((c) => functionItem(c.function).name);
+
+  const index = functions.findLastIndex((f) => !SETUP.has(f));
+  const i = index < 0 ? functions.length - 1 : index;
+  const call = intent.calls[i];
+  const item = functionItem(call.function);
+  const main = knownContract(chains, intent.chainId, call.target);
+  const named = (address: string) => knownContract(chains, intent.chainId, address)?.name ?? short(address);
+
+  let verb = `calls ${item.name} on`;
+  let object = main?.protocol?.name ?? main?.name ?? short(call.target);
+  if (item.name === "transfer") {
+    // A plain payment: the target is the token, so what matters is who receives it.
+    const to = item.inputs.findIndex((p) => p.type === "address");
+    verb = "pays";
+    object = to >= 0 ? named(call.args[to] as string) : object;
+  } else {
+    verb = VERBS.find(([re]) => re.test(item.name))?.[1] ?? verb;
+  }
+
+  return {
+    token,
+    amount: token ? formatAmount(intent.amount, token.decimals) : intent.amount,
+    symbol: token?.symbol ?? short(intent.token),
+    decimals: token?.decimals ?? null,
+    chain: chainName(intent.chainId),
+    verb,
+    object,
+    main,
+    theme: main?.protocol?.theme,
+    functions,
+  };
+}

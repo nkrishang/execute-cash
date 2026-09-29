@@ -92,7 +92,7 @@ export function DashboardView({ email, onSignOut }: { email: string | null; onSi
         <div className="verify-cta-row dash-guide">
           <a className="verify-cta" href={DOCS.quickstart} target="_blank" rel="noopener noreferrer">
             <span className="verify-cta-text">
-              Read how to set up and use <mark>Execute API</mark>
+              How to set up and use <mark>Execute API</mark>
             </span>
             <span className="verify-cta-arrow" aria-hidden="true">
               <svg viewBox="0 0 16 16">

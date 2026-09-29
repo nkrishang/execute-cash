@@ -342,7 +342,7 @@ const PACE: [number, number][] = [
 ];
 
 /** Screens of scrolling that hold the last frame before the page moves on. */
-const HOLD_END = 0.6;
+const HOLD_END = 0.1;
 
 /** The whole story, in screens of scrolling. */
 export const SCROLL = PACE.reduce((sum, [, screens]) => sum + screens, 0) + HOLD_END;

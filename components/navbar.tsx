@@ -17,12 +17,14 @@ const PROTOCOLS = [
  */
 export function Navbar({ cta: mode = "scroll" }: { cta?: "scroll" | "always" }) {
   const [open, setOpen] = useState(false);
+  const [sheet, setSheet] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [joined, setJoined] = useState(false);
   const cta = mode === "always" || joined;
   const headerRef = useRef<HTMLElement>(null);
   const ctaRef = useRef<HTMLAnchorElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
   const closeTimer = useRef<number | undefined>(undefined);
 
   const openNow = () => {
@@ -49,6 +51,21 @@ export function Navbar({ cta: mode = "scroll" }: { cta?: "scroll" | "always" }) 
   }, [open]);
 
   useEffect(() => () => window.clearTimeout(closeTimer.current), []);
+
+  // Phones: the menu sheet closes on Escape and on a tap outside it.
+  useEffect(() => {
+    if (!sheet) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setSheet(false);
+    const onDown = (e: PointerEvent) => {
+      if (!sheetRef.current?.contains(e.target as Node)) setSheet(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onDown);
+    };
+  }, [sheet]);
 
   // Content scrolls under the bar, so it gains a backdrop once the page moves.
   useEffect(() => {
@@ -163,6 +180,56 @@ export function Navbar({ cta: mode = "scroll" }: { cta?: "scroll" | "always" }) 
               <path d="M3.5 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </a>
+
+          <div ref={sheetRef} className="nav-sheet-wrap">
+            <button
+              type="button"
+              className="nav-burger"
+              aria-label="Menu"
+              aria-expanded={sheet}
+              aria-controls="nav-sheet"
+              onClick={() => setSheet((o) => !o)}
+            >
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
+            </button>
+
+            <div id="nav-sheet" className="nav-sheet" data-open={sheet ? "" : undefined} inert={!sheet}>
+              <p className="nav-panel-title">Earn without connecting</p>
+              <ul>
+                {PROTOCOLS.map((p) => (
+                  <li key={p.name}>
+                    <a
+                      href={p.href}
+                      className="nav-row"
+                      style={{ "--brand": p.color } as CSSProperties}
+                      onClick={() => setSheet(false)}
+                    >
+                      <span className="nav-row-logo" data-protocol={p.name.toLowerCase()}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={p.logo} alt="" width={28} height={28} />
+                      </span>
+                      <span className="nav-row-text">
+                        <span className="nav-row-name">{p.name}</span>
+                        <span className="nav-row-blurb">{p.blurb}</span>
+                      </span>
+                      <svg className="nav-row-arrow" viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M3.5 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <div className="nav-sheet-foot">
+                <a href={DOCS.home} className="nav-sheet-link">
+                  Docs
+                </a>
+                <Link href="/dashboard" className="nav-sheet-link nav-sheet-primary">
+                  Sign in
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </header>

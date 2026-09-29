@@ -181,7 +181,7 @@ export function Verify() {
 
         <div className="verify-cta-row">
           <a className="verify-cta" href={DOCS.guides}>
-            <span className="verify-cta-text">
+            <span className="verify-cta-text verify-cta-full">
               Read how <mark>Execute API</mark> enables deposits into{" "}
               {SESSIONS.map((s, i) => (
                 <Fragment key={s.id}>
@@ -194,6 +194,18 @@ export function Verify() {
                 </Fragment>
               ))}
               without connecting wallets or approving tokens
+            </span>
+            {/* Phones: the sentence shrinks to a title and the three logos. */}
+            <span className="verify-cta-text verify-cta-short">
+              <mark>Execute API</mark> for vaults
+              <span className="verify-cta-logos" aria-label={SESSIONS.map((s) => s.protocol).join(", ")} role="img">
+                {SESSIONS.map((s) => (
+                  <span key={s.id} className="verify-cta-protocol" data-protocol={s.id} aria-hidden="true">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={s.logo} alt="" width={20} height={20} />
+                  </span>
+                ))}
+              </span>
             </span>
             <span className="verify-cta-arrow" aria-hidden="true">
               <svg viewBox="0 0 16 16">

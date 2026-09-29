@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1200" />
+<title>Execute: Open Graph image</title>
+<!--
+  Source of app/opengraph-image.png (1200×630).
+
+  The landing hero, composed for a link card: "Never" beside the Aqua "Connect Wallet" button.
+  Every value comes from the site — colours, Archivo/Recursive axes and the button's layered
+  shadows from app/globals.css, the mark from components/logo.tsx, the copy from
+  components/hero.tsx — so the card reads as the page it links to.
+
+  Render, from the project root (needs Chrome, and network for the two Google Fonts families):
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars \
+    --window-size=1200,630 --force-device-scale-factor=1 --virtual-time-budget=20000 \
+    --screenshot=app/opengraph-image.png design/og-image.html
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&display=block"
+/>
+<style>
+  :root {
+    --paper: #f3f2ee;
+    --ink: #0b0b0c;
+    --muted: #6b6a66;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+
+  body {
+    position: relative;
+    font-family: Archivo, ui-sans-serif, system-ui, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* The page's own light: a white wash from above onto paper. */
+    background:
+      radial-gradient(1040px 560px at 50% -18%, #ffffff 0%, rgb(255 255 255 / 0) 62%),
+      var(--paper);
+  }
+
+  /* ---- Bar: the navbar's brand, and where this lives ---- */
+
+  .bar {
+    position: absolute;
+    top: 46px;
+    left: 71px;
+    right: 71px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .logo { height: 34px; width: auto; }
+  .wordmark {
+    font-size: 30px;
+    font-weight: 760;
+    font-variation-settings: "wdth" 110;
+    letter-spacing: -0.035em;
+  }
+
+
+  /* ---- The claim ---- */
+
+  .hero {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 6px;
+  }
+
+  .line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2em;
+    font-size: 172px;
+    /* The N's side bearing: without this the ink sits 7px right of centre. */
+    transform: translateX(-7px);
+  }
+
+  .never {
+    font-size: 1em;
+    font-weight: 800;
+    font-variation-settings: "wdth" 112;
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+  }
+
+  .sub {
+    max-width: 880px;
+    margin-top: 50px;
+    font-size: 30px;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--muted);
+    text-wrap: balance;
+  }
+
+  /* ---- The Aqua button: app/globals.css `.morph[data-style="aqua"]`, sized as in the hero ---- */
+
+  .morph {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    font-size: 0.255em;
+  }
+
+  .aura {
+    position: absolute;
+    inset: -0.45em -0.75em;
+    z-index: -1;
+    opacity: 0.16;
+    filter: blur(0.85em) saturate(1.05);
+  }
+
+  .aura i { position: absolute; width: 46%; height: 115%; border-radius: 50%; }
+  .aura i:nth-child(1) { left: 0%;  top: -8%;  background: #5b9bff; }
+  .aura i:nth-child(2) { right: 2%; top: -18%; background: #6aa8ff; }
+  .aura i:nth-child(3) { left: 24%; bottom: -24%; background: #8db8ff; }
+  .aura i:nth-child(4) { right: 16%; bottom: -20%; background: #3f7dff; }
+
+  .btn {
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    width: 11.4em;
+    height: 2.6em;
+    overflow: hidden;
+    border: 0.035em solid rgb(0 45 140 / 0.6);
+    border-radius: 1.3em;
+    background: linear-gradient(180deg, #1f6fff, #86ccff);
+    color: #ffffff;
+    font-family: Recursive, ui-sans-serif, system-ui, sans-serif;
+    font-size: 1em;
+    line-height: 1;
+    font-variation-settings: "MONO" 0, "CASL" 0, "wght" 620, "slnt" 0, "CRSV" 0.5;
+    letter-spacing: 0;
+    box-shadow:
+      0 0.28em 0.5em -0.16em rgb(10 60 170 / 0.3),
+      0 0.06em 0.12em 0 rgb(10 60 170 / 0.2),
+      inset 0 -0.3em 0.5em 0 rgb(160 225 255 / 0.95),
+      inset 0 0.12em 0.22em 0 rgb(0 40 130 / 0.55);
+  }
+
+  .fx { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+
+  .gloss {
+    inset: 0.1em 0.5em auto 0.5em;
+    height: 47%;
+    border-radius: 1.1em 1.1em 0.7em 0.7em / 0.9em 0.9em 0.45em 0.45em;
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.92), rgb(255 255 255 / 0.12));
+  }
+
+  .sheen { overflow: hidden; opacity: 0.45; }
+  .sheen::before {
+    content: "";
+    position: absolute;
+    top: -40%;
+    bottom: -40%;
+    left: 0;
+    width: 26%;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent);
+    transform: translateX(-18%) skewX(-20deg);
+  }
+
+  .label {
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+    text-shadow: 0 -0.03em 0.06em rgb(0 40 120 / 0.65);
+  }
+
+  /* The hero's cursor, resting on the button as it does on the page. */
+  .cursor {
+    position: absolute;
+    z-index: 4;
+    left: 72%;
+    top: 67%;
+    width: 0.62em;
+    transform-origin: 8% 5%;
+    filter: drop-shadow(0 0.08em 0.12em rgb(0 0 0 / 0.28));
+  }
+  .cursor path { fill: #0b0b0c; stroke: #ffffff; stroke-width: 1.4; stroke-linejoin: round; }
+
+  /* The page's refusal, "Nothing to connect. Just send." (components/stage.tsx `RefusalTip`). */
+  .tip {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    bottom: calc(100% + 0.95em);
+    transform: translateX(-50%);
+    padding: 0.58em 0.92em;
+    border-radius: 999px;
+    background: #0b0b0c;
+    color: #f3f2ee;
+    font-family: Archivo, sans-serif;
+    font-size: 22.4px;
+    font-weight: 560;
+    letter-spacing: -0.005em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .tip::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 0.6em;
+    height: 0.6em;
+    background: inherit;
+    border-radius: 0 0 0.15em 0;
+    transform: translate(-50%, -55%) rotate(45deg);
+  }
+
+  /* ---- The hero's pill, along the foot ---- */
+
+  .pill {
+    position: absolute;
+    left: 50%;
+    bottom: 44px;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 24px 6px 8px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.72);
+    box-shadow: inset 0 0 0 1px rgb(11 11 12 / 0.08), 0 1px 2px rgb(11 11 12 / 0.04);
+    font-size: 21px;
+    font-weight: 540;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+  }
+
+  .pill-logos { display: flex; }
+  .pill-logo {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    margin-left: -8px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px #ffffff;
+  }
+  .pill-logo:first-child { margin-left: 0; }
+  .pill-logo img { width: 100%; height: 100%; object-fit: cover; }
+  .pill-logo[data-protocol="spark"] { background: #fff1ec; }
+  .pill-logo[data-protocol="spark"] img { width: 82%; height: 82%; }
+</style>
+</head>
+<body>
+  <header class="bar">
+    <div class="brand">
+      <svg class="logo" viewBox="47.9 414.38 1134.66 454.19" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M 695.5 414.7 C 668.7 416.5, 647.4 421, 627.3 429 C 600.3 439.8, 587.7 448.2, 527 495.9 C 521.2 500.4, 506.8 511.7, 495 520.8 C 458 549.6, 454.8 552, 454 552 C 453.7 552, 451.8 549.2, 449.9 545.8 C 447.9 542.3, 441.3 530.7, 435 520 C 428.8 509.3, 421.3 496.4, 418.5 491.5 C 415.7 486.6, 410.1 476.9, 406.1 470 C 402.1 463.1, 395.5 451.6, 391.3 444.5 C 387.2 437.4, 383.3 430.7, 382.6 429.7 C 381.3 428.1, 375.4 428, 277.1 428.2 L 173 428.5 178.1 437 C 180.9 441.7, 188.6 453.9, 195.2 464.2 C 201.7 474.5, 208.6 485.6, 210.4 488.7 C 212.2 491.9, 218.9 502.6, 225.3 512.5 C 231.7 522.4, 239.1 534.1, 241.8 538.5 C 249.4 551, 274 590.2, 276.3 593.4 C 278.1 596, 289.2 614.2, 305.2 640.7 C 307.9 645.2, 309.9 649.4, 309.5 650 C 309.2 650.5, 304.3 654.7, 298.7 659.2 C 283.9 671.1, 247 701.5, 236.5 710.4 C 227.7 717.9, 215.5 728, 202 739 C 198.3 742, 187.5 751, 177.9 759 C 156.2 777.2, 113.8 812.3, 106.1 818.5 C 102 821.8, 71 847.6, 58.4 858.2 C 53.9 862, 49.7 865.7, 49 866.5 C 47.9 867.8, 58.8 868, 142.6 868 L 237.5 868 244.1 862.7 C 247.7 859.9, 257.7 851.9, 266.4 845 C 275.2 838.1, 289.1 827.1, 297.4 820.5 C 305.7 813.9, 323.1 800.2, 336 790 C 348.9 779.8, 364.8 767.1, 371.4 761.8 C 383.2 752.3, 383.5 752.1, 385 754.2 C 388 758.3, 422.9 815, 446 853.4 L 454.5 867.5 556.3 867.8 C 612.2 867.9, 658 867.7, 658 867.3 C 658 866.9, 656.2 863.7, 654 860.1 C 649.4 852.6, 590.8 762.8, 586 756 C 582.9 751.4, 545.8 695.3, 527.2 666.9 C 521.6 658.3, 517 650.9, 517 650.3 C 517 649.4, 532.8 637.4, 556 620.7 C 559.6 618.1, 567.2 612.6, 573 608.4 C 586.9 598.2, 604.7 585.4, 625.5 570.5 C 634.9 563.8, 648.1 554.3, 655 549.3 C 676.9 533.5, 691.5 526.3, 712.5 520.8 L 721.5 518.5 848 518.5 L 974.5 518.5 983.9 520.9 C 1009.9 527.4, 1028.4 543.9, 1034.6 566 C 1036.8 573.8, 1037.8 599.8, 1035.9 600.5 C 1035.1 600.8, 959.3 601.1, 867.4 601.3 L 700.3 601.5 695.8 606.5 C 666.9 639, 651.3 662.3, 640.5 689 C 632.2 709.5, 628.8 726.4, 628.9 746.8 C 628.9 789.9, 647.8 824.6, 683.1 846.8 C 696.3 855.1, 718.3 863, 737.1 866.1 C 747.5 867.8, 888.4 868.6, 910.9 867.1 C 954.3 864.1, 993.7 853.8, 1030 835.9 C 1071.7 815.3, 1101.8 791, 1125 759.1 C 1135.4 744.8, 1144.8 728.5, 1143.5 727.2 C 1142.7 726.4, 999.5 726.2, 996.3 727 C 995.2 727.3, 992.2 730.2, 989.7 733.5 C 973.3 755.6, 947.7 771, 916.8 777.2 C 906 779.4, 903.5 779.5, 858.5 779.5 C 805.9 779.5, 803.2 779.2, 788.9 772.4 C 774.8 765.6, 765.6 756.3, 760.3 743.4 C 753.9 727.6, 755.5 704.8, 764.5 684.5 L 766.7 679.4 961.6 679.6 C 1068.8 679.7, 1158.1 679.5, 1160 679.1 C 1163.4 678.4, 1163.5 678.3, 1167.2 666.2 C 1177.2 633.4, 1182.6 592.2, 1180 566.5 C 1177.1 536.6, 1170 514.3, 1155.9 491.3 C 1140.7 466.5, 1115.3 444, 1088.1 431.2 C 1071.6 423.5, 1061.1 420.3, 1039 416.3 C 1030.3 414.7, 1016.2 414.6, 865 414.4 C 774.5 414.4, 698.3 414.5, 695.5 414.7" /></svg>
+      <span class="wordmark">execute</span>
+    </div>
+  </header>
+
+  <main class="hero">
+    <div class="line">
+      <h1 class="never">Never</h1>
+      <div class="morph">
+        <div class="aura" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="btn">
+          <span class="fx gloss"></span>
+          <span class="fx sheen"></span>
+          <span class="label">Connect Wallet</span>
+        </div>
+        <p class="tip">Nothing to connect. Just send.</p>
+        <svg class="cursor" viewBox="0 0 17 24" aria-hidden="true">
+          <path d="M1.5 1.5v18.4l4.6-4.4 3.1 7 3.3-1.4-3-6.9h6.3L1.5 1.5Z" />
+        </svg>
+      </div>
+    </div>
+
+    <p class="sub">
+      Infrastructure for apps to let users earn onchain without wallet connections, token approvals or bridging.
+    </p>
+  </main>
+
+  <div class="pill">
+    <span class="pill-logos" aria-hidden="true">
+      <span class="pill-logo" data-protocol="morpho"><img src="../public/protocols/morpho.png" alt="" /></span>
+      <span class="pill-logo" data-protocol="spark"><img src="../public/protocols/spark.png" alt="" /></span>
+      <span class="pill-logo" data-protocol="aave"><img src="../public/protocols/aave.svg" alt="" /></span>
+    </span>
+    <span>Integrations for Morpho, Spark and Aave</span>
+  </div>
+</body>
+</html>

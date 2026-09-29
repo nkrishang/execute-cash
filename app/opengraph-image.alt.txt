@@ -1,0 +1,1 @@
+Execute. The word “Never” beside a glossy blue “Connect Wallet” button, answered by the tooltip “Nothing to connect. Just send.” Beneath: infrastructure for apps to let users earn onchain without wallet connections, token approvals or bridging, with integrations for Morpho, Spark and Aave.

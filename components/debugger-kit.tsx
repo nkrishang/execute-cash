@@ -19,11 +19,21 @@ export const ZERO_ADDRESS = `0x${"0".repeat(40)}`;
 const money = (whole: number, cents: number) => `${whole.toLocaleString("en-US")}.${String(cents).padStart(2, "0")}`;
 
 /** Base units as "1,000.00": at least two decimals, and every further one that isn't a trailing zero. */
-export function formatToken(v: bigint, decimals = 6) {
+function fullToken(v: bigint, decimals: number) {
   const unit = 10n ** BigInt(decimals);
   const whole = (v / unit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const frac = (v % unit).toString().padStart(decimals, "0").replace(/0+$/, "").padEnd(2, "0");
   return `${whole}.${frac}`;
+}
+
+/**
+ * Base units as the debugger shows them: `fullToken`, cut to six decimals with "…" when there are
+ * more (a vault share has 18), so the figure fits its place. The exact amount is its title.
+ */
+export function formatToken(v: bigint, decimals = 6) {
+  const full = fullToken(v, decimals);
+  const [whole, frac] = full.split(".");
+  return frac.length > 6 ? `${whole}.${frac.slice(0, 6)}…` : full;
 }
 
 /**
@@ -83,8 +93,9 @@ export function Money({
   className: string;
 }) {
   const shown = useRoll(value, read, still, ms, decimals);
+  const full = fullToken(value, decimals ?? 6);
   return (
-    <span className={className} data-d={read ? "" : undefined} data-bad={bad ? "" : undefined}>
+    <span className={className} data-d={read ? "" : undefined} data-bad={bad ? "" : undefined} title={read && full !== shown ? full : undefined}>
       <TextMorph>{shown}</TextMorph>
     </span>
   );

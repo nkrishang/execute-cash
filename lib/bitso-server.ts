@@ -1,15 +1,15 @@
 import "server-only";
-import { createPublicClient, http, parseAbi, type Address } from "viem";
+import { createPublicClient, fallback, http, parseAbi, type Address } from "viem";
 import { base } from "viem/chains";
 import { MARKET_ID, MORPHO, VAULT } from "@/lib/bitso";
-import { baseRpcUrl } from "@/lib/server-env";
+import { rpcUrls } from "@/lib/server-env";
 
 /*
  * What /bitso reads from Base and from Morpho: the vault's quote behind each address it creates, the
  * collateral a wallet ends up with, and the rates the page shows.
  */
 
-const client = createPublicClient({ chain: base, transport: http(baseRpcUrl, { timeout: 8_000, retryCount: 1 }) });
+const client = createPublicClient({ chain: base, transport: fallback(rpcUrls.base.map((url) => http(url, { timeout: 8_000, retryCount: 1 }))) });
 
 const VAULT_ABI = parseAbi([
   "function previewDeposit(uint256 assets) view returns (uint256 shares)",

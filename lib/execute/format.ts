@@ -6,6 +6,8 @@ export const CHAIN_NAMES: Record<number, string> = { 8453: "Base", 42161: "Arbit
 const EXPLORERS: Record<number, { name: string; url: string }> = {
   8453: { name: "Basescan", url: "https://basescan.org" },
   42161: { name: "Arbiscan", url: "https://arbiscan.io" },
+  143: { name: "Monadscan", url: "https://monadscan.com" },
+  5042: { name: "Arc's explorer", url: "https://explorer.arc.io" },
 };
 
 export function chainName(chainId: number): string {

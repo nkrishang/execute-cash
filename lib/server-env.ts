@@ -9,5 +9,14 @@ export const executeApiUrl = (process.env.EXECUTE_API_URL ?? "https://api.execut
  */
 export const demoApiKey = process.env.EXECUTE_DEMO_API_KEY ?? "";
 
-/** A Base JSON-RPC endpoint, for /bitso's quotes and positions. Default: Base's public one, which is rate limited. */
-export const baseRpcUrl = process.env.BASE_RPC_URL || "https://mainnet.base.org";
+const urls = (paid: string | undefined, ...open: string[]) => (paid ? [paid, ...open] : open);
+
+/**
+ * JSON-RPC endpoints for /bitso's and /morpho's quotes and positions, in the order they're tried:
+ * Execute's paid one where it's set (production), then the chain's public ones, which are rate limited.
+ */
+export const rpcUrls = {
+  base: urls(process.env.BASE_RPC_URL, "https://mainnet.base.org", "https://base-rpc.publicnode.com"),
+  monad: urls(process.env.MONAD_RPC_URL, "https://rpc.monad.xyz", "https://rpc1.monad.xyz"),
+  arc: urls(process.env.ARC_RPC_URL, "https://rpc.mainnet.arc.io", "https://arc-rpc.publicnode.com"),
+};

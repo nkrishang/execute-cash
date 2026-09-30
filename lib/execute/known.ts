@@ -43,6 +43,26 @@ const PROTOCOLS: Record<number, Record<string, Known>> = {
       protocol: { name: "Morpho", theme: "morpho" },
     },
   },
+  // What /morpho's switches call on Monad and Arc (lib/switch.ts); the vaults are named by the page.
+  143: {
+    "0x82b684483e844422fd339df0b67b3b111f02c66e": {
+      name: "Morpho Bundler3",
+      logo: { kind: "img", src: "/protocols/morpho.png" },
+      protocol: { name: "Morpho", theme: "morpho" },
+    },
+    "0x725ab8cad931bcb80fdbf10955a806765cce00e5": {
+      name: "Morpho GeneralAdapter1",
+      logo: { kind: "img", src: "/protocols/morpho.png" },
+      protocol: { name: "Morpho", theme: "morpho" },
+    },
+  },
+  5042: {
+    "0x76c1deefae48523e14903085081bda2999450b68": {
+      name: "Morpho VaultBundlesV1",
+      logo: { kind: "img", src: "/protocols/morpho.png" },
+      protocol: { name: "Morpho", theme: "morpho" },
+    },
+  },
 };
 
 /** Tokens other than USDC, as their initial on their colour. */
@@ -69,8 +89,8 @@ export function knownContract(chains: Chain[], chainId: number, address: string)
 const CHAIN_MARKS: Record<number, Logo> = {
   8453: { kind: "base" },
   42161: { kind: "letter", letter: "A", color: "#213147" },
-  143: { kind: "letter", letter: "M", color: "#6e54ff" },
-  5042: { kind: "letter", letter: "A", color: "#18181b" },
+  143: { kind: "img", src: "/chains/monad.svg" },
+  5042: { kind: "img", src: "/chains/arc.svg" },
   31337: { kind: "letter", letter: "L", color: "#52525b" },
 };
 

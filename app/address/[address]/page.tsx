@@ -7,6 +7,8 @@ import { Navbar } from "@/components/navbar";
 import { describe } from "@/lib/execute/describe";
 import type { ChainList, ExecutableAddress, StatusView } from "@/lib/execute/types";
 import { executeApiUrl } from "@/lib/server-env";
+import { readSwitchIntent } from "@/lib/switch";
+import { loadCatalog } from "@/lib/switch-server";
 
 const ADDRESS = /^0x[0-9a-fA-F]{40}$/;
 
@@ -24,6 +26,8 @@ const load = cache(async (address: string) => {
     exe,
     status: status.ok ? ((await status.json()) as StatusView) : null,
     chains: chains.ok ? ((await chains.json()) as ChainList).chains : [],
+    // A switch names its vaults from /morpho's catalog.
+    vaults: readSwitchIntent(exe.intent) ? await loadCatalog() : [],
   };
 });
 
@@ -31,7 +35,7 @@ export async function generateMetadata({ params }: PageProps<"/address/[address]
   const { address } = await params;
   const data = ADDRESS.test(address) ? await load(address) : null;
   if (!data) return { title: "Execute", robots: { index: false, follow: false } };
-  const story = describe(data.exe, data.chains);
+  const story = describe(data.exe, data.chains, data.vaults);
   const title = `Send ${story.amount} ${story.symbol}. It ${story.verb} ${story.object}.`;
   const description = `An executable address on ${story.chain}, checked in your browser: what sending to it does, byte by byte.`;
   return {
@@ -52,7 +56,7 @@ export default async function AddressPage({ params }: PageProps<"/address/[addre
   if (!ADDRESS.test(address)) notFound();
   const data = await load(address);
   if (!data) notFound();
-  const story = describe(data.exe, data.chains);
+  const story = describe(data.exe, data.chains, data.vaults);
 
   return (
     <>

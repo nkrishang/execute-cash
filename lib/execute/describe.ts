@@ -1,4 +1,5 @@
 import { VAULT, readBitsoIntent } from "@/lib/bitso";
+import { readSwitchIntent, type Vault } from "@/lib/switch";
 import { functionItem } from "./derive";
 import { chainName, formatAmount, short, tokenOf } from "./format";
 import { knownContract, type Known, type Theme } from "./known";
@@ -35,7 +36,10 @@ const VERBS: [RegExp, string][] = [
   [/^(swap|exactInput|exactOutput)/, "swaps on"],
 ];
 
-export function describe(exe: ExecutableAddress, chains: Chain[]): Story {
+/** A vault as a switch names it: from /morpho's catalog, where the page has it. */
+export type NamedVault = Pick<Vault, "chainId" | "address" | "name" | "symbol" | "image">;
+
+export function describe(exe: ExecutableAddress, chains: Chain[], vaults: NamedVault[] = []): Story {
   const { intent } = exe;
   const token = tokenOf(chains, intent.chainId, intent.token);
   const functions = intent.calls.map((c) => functionItem(c.function).name);
@@ -51,6 +55,16 @@ export function describe(exe: ExecutableAddress, chains: Chain[]): Story {
   if (readBitsoIntent(intent)) {
     const vault = knownContract(chains, intent.chainId, VAULT);
     return { ...money, verb: "deposits into", object: "Bitso USDC Prime, as collateral for MXNB", main: vault, theme: vault?.protocol?.theme, functions };
+  }
+
+  // /morpho's switches pay the source vault's shares to a Morpho bundler; say where they end up.
+  const switched = readSwitchIntent(intent);
+  if (switched) {
+    const vault = (address: string) => vaults.find((v) => v.chainId === intent.chainId && v.address.toLowerCase() === address.toLowerCase());
+    const [from, to] = [vault(switched.from), vault(switched.to)];
+    const name = to?.name ?? knownContract(chains, intent.chainId, switched.to)?.name ?? short(switched.to);
+    const main: Known = { name, logo: { kind: "img", src: to?.image ?? "/protocols/morpho.png" }, protocol: { name: "Morpho", theme: "morpho" } };
+    return { ...money, symbol: from?.symbol ?? money.symbol, verb: "switches into", object: name, main, theme: "morpho", functions };
   }
 
   const index = functions.findLastIndex((f) => !SETUP.has(f));

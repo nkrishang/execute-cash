@@ -4243,7 +4243,8 @@ img.dbg-mark[src*="spark"] {
 /* ---- /bitso: Bitso's vault and MXNB market as one executable address ------------------------
  * The header, like the verify section's: the claim on the left, what it means and Morpho's rates on
  * the right. Below, the tool: a white card that makes and follows the address, beside a dark window
- * showing what sending to it does, call by call, in the debugger's colours.
+ * showing what sending to it does, call by call, in the debugger's colours. /morpho, below, uses
+ * the same frame and paying panel.
  * ------------------------------------------------------------------------------------------- */
 
 .bitso-inner {
@@ -4952,6 +4953,876 @@ img.dbg-mark[src*="spark"] {
   .bitso-inner-calls { padding-left: 0.85rem; }
   .bitso-arg { grid-template-columns: minmax(0, 1fr); gap: 0.1rem; }
   .bitso-rest, .bitso-proof { padding-inline: 1rem; }
+}
+
+/* ---- /morpho: switching Morpho vaults as one executable address ------------------------------
+ * /bitso's frame (header, card, paying panel, fine print), with a swap in the card: the chain, the
+ * wallet, then the vault to leave and the vault to join, each in a box like a token's. Beside it,
+ * what switching earns, charted. Vaults are picked from a list in a dialog.
+ * ------------------------------------------------------------------------------------------- */
+
+.sw-tool {
+  display: grid;
+  grid-template-columns: minmax(0, 27rem) minmax(0, 1fr);
+  align-items: start;
+  gap: 2rem;
+}
+
+.sw-card {
+  position: sticky;
+  top: 5.5rem;
+  padding: 1.25rem 1.25rem 1.5rem;
+  border-radius: 1.5rem;
+  background: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px rgb(11 11 12 / 0.06),
+    0 1px 2px rgb(11 11 12 / 0.04),
+    0 24px 48px -36px rgb(11 11 12 / 0.35);
+}
+
+.sw-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.sw-form .bitso-label {
+  margin-top: 1.25rem;
+}
+
+.sw-unavailable {
+  padding: 1rem 0.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+/* The chain, as a segmented control. */
+.sw-chains {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: var(--color-paper);
+}
+
+.sw-chain {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.sw-chain:hover {
+  color: var(--color-ink);
+}
+
+.sw-chain[aria-pressed="true"] {
+  background: #ffffff;
+  color: var(--color-ink);
+  box-shadow:
+    0 0 0 1px rgb(11 11 12 / 0.06),
+    0 1px 3px rgb(11 11 12 / 0.1);
+}
+
+.sw-chain:focus-visible,
+.sw-vbutton:focus-visible,
+.sw-flip:focus-visible,
+.sw-max:focus-visible,
+.sw-row:focus-visible,
+.sw-dialog-close:focus-visible,
+.sw-plot:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+.sw-chain-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.sw-chain-mark[data-of="base"] {
+  border-radius: 0;
+}
+
+.sw-chain-mark svg,
+.sw-chain-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sw-form .sw-destination {
+  height: 3rem;
+  padding: 0 1.15rem;
+}
+
+/* ---- The two vaults' shares, like a transfer's two tokens ---- */
+
+/* One column that can't grow past the card: a vault's long name only ever truncates. */
+.sw-pair {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.3rem;
+  margin-top: 1.25rem;
+}
+
+/* The bottom padding keeps the footer clear of the swap button on the seam below it. */
+.sw-box {
+  padding: 0.8rem 0.9rem 0.95rem 1.05rem;
+  border-radius: 1.1rem;
+  background: #f7f6f2;
+  box-shadow: inset 0 0 0 1px rgb(11 11 12 / 0.05);
+  transition: box-shadow 160ms ease;
+}
+
+.sw-box:focus-within {
+  box-shadow: inset 0 0 0 1.5px rgb(11 11 12 / 0.5);
+}
+
+.sw-box-top,
+.sw-box-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 1.5rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.sw-box-foot > span:first-child {
+  flex: none;
+  white-space: nowrap;
+}
+
+.sw-box-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.sw-box-held {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.sw-max {
+  height: 1.4rem;
+  padding: 0 0.55rem;
+  border-radius: 999px;
+  background: rgb(11 11 12 / 0.07);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.sw-max:hover {
+  background: rgb(11 11 12 / 0.12);
+}
+
+.sw-max[aria-pressed="true"] {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.sw-box-main {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.3rem 0 0.35rem;
+}
+
+/* An amount of shares, sent or received: the token beside it says which. */
+.sw-amount {
+  flex: 1;
+  min-width: 0;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-sans);
+  font-size: 1.875rem;
+  font-weight: 650;
+  line-height: 2.75rem;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* A whole balance can run to eighteen decimals: smaller, rather than cut off. */
+.sw-amount[data-long="l"] { font-size: 1.375rem; }
+.sw-amount[data-long="xl"] { font-size: 1.0625rem; letter-spacing: -0.01em; }
+
+.sw-amount:focus {
+  outline: none;
+}
+
+.sw-amount::placeholder,
+.sw-amount[data-empty] {
+  color: rgb(11 11 12 / 0.28);
+}
+
+.sw-amount[aria-invalid="true"] {
+  color: #b42318;
+}
+
+/* Which vault the shares are of, and what it pays: the name gives way first. */
+.sw-box-vault {
+  display: flex;
+  gap: 0.3rem;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.sw-box-foot > .sw-box-vault {
+  flex: 0 1 auto;
+}
+
+.sw-box-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sw-delta {
+  margin-left: 0.2rem;
+  font-weight: 650;
+  color: var(--color-ink);
+}
+
+/* The vault in a box: its mark and name, opening the list. */
+.sw-vbutton {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 62%;
+  height: 2.5rem;
+  padding: 0 0.6rem 0 0.35rem;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 1px rgb(11 11 12 / 0.08),
+    0 1px 2px rgb(11 11 12 / 0.06);
+  font-size: 0.875rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: box-shadow 160ms ease;
+}
+
+.sw-vbutton:hover {
+  box-shadow:
+    0 0 0 1px rgb(11 11 12 / 0.16),
+    0 2px 6px rgb(11 11 12 / 0.08);
+}
+
+.sw-vbutton-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sw-chevron {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-muted);
+}
+
+/* A vault's mark: its image, round, its asset's logo tucked in the corner. */
+.sw-vmark {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.sw-vmark > img:first-child,
+.sw-vmark-letter {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgb(11 11 12 / 0.07);
+}
+
+.sw-vmark-letter {
+  display: grid;
+  place-items: center;
+  background: #e7e5de;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-muted);
+}
+
+.sw-vmark-asset {
+  position: absolute;
+  right: -0.2rem;
+  bottom: -0.2rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 0 1.5px #ffffff;
+}
+
+/* Swapping the two, on the seam between them. */
+.sw-flip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 0.7rem;
+  background: #f7f6f2;
+  box-shadow:
+    0 0 0 3px #ffffff,
+    inset 0 0 0 1px rgb(11 11 12 / 0.08);
+  color: var(--color-ink);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: background 160ms ease, transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.sw-flip:hover:not(:disabled) {
+  background: #efeee9;
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.sw-flip:disabled {
+  color: rgb(11 11 12 / 0.3);
+  cursor: default;
+}
+
+.sw-flip svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.sw-submit {
+  width: 100%;
+  height: 3rem;
+  margin-top: 1.25rem;
+  font-size: 0.9375rem;
+}
+
+/* The paying panel is /bitso's; a whole balance of shares can run to eighteen decimals. */
+.sw-value .bitso-value-amount {
+  font-size: 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+/* ---- What switching earns ---- */
+
+.sw-compare {
+  padding: 1.5rem 1.6rem 1.4rem;
+  border-radius: 1.5rem;
+  background: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px rgb(11 11 12 / 0.06),
+    0 1px 2px rgb(11 11 12 / 0.04),
+    0 24px 48px -36px rgb(11 11 12 / 0.35);
+}
+
+.sw-compare-empty {
+  padding: 3rem 0;
+  font-size: 0.9375rem;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.sw-compare-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.sw-compare-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem 0.6rem;
+  margin-top: 0.35rem;
+  font-size: clamp(2rem, 3.4vw, 2.75rem);
+  font-weight: 700;
+  font-variation-settings: "wdth" 104;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+
+.sw-compare-from {
+  color: #a4a39d;
+}
+
+.sw-compare-arrow {
+  width: 0.62em;
+  height: 0.42em;
+  color: #a4a39d;
+}
+
+.sw-compare-sub {
+  margin-top: 0.4rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+.sw-chart {
+  margin-top: 1.4rem;
+}
+
+.sw-chart-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.sw-chart-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.sw-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  min-width: 0;
+}
+
+.sw-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.sw-key i,
+.sw-tip-row i {
+  flex: none;
+  width: 0.75rem;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.sw-plot {
+  position: relative;
+  border-radius: 0.5rem;
+}
+
+.sw-plot svg {
+  display: block;
+  overflow: visible;
+}
+
+.sw-grid {
+  stroke: rgb(11 11 12 / 0.07);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.sw-cross {
+  stroke: rgb(11 11 12 / 0.28);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.sw-tick {
+  font-size: 11px;
+  fill: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.sw-end {
+  font-size: 12px;
+  font-weight: 650;
+  fill: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.sw-end[data-tone="from"] {
+  fill: var(--color-muted);
+}
+
+.sw-chart-empty {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  border-radius: 0.75rem;
+  background: #f7f6f2;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+.sw-chart-note {
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+/* The crosshair's reading, beside it: to its right, or its left near the chart's right edge (chart.tsx). */
+.sw-tip {
+  position: absolute;
+  top: 0.25rem;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.2rem;
+  min-width: 10rem;
+  max-width: 16rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.7rem;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-size: 0.75rem;
+  pointer-events: none;
+}
+
+.sw-tip-day {
+  color: rgb(243 242 238 / 0.62);
+}
+
+.sw-tip-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.sw-tip-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sw-tip-value {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.sw-table {
+  width: 100%;
+  margin-top: 1.4rem;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.sw-table th,
+.sw-table td {
+  padding: 0.55rem 0;
+  box-shadow: inset 0 -1px 0 rgb(11 11 12 / 0.07);
+}
+
+.sw-table thead th {
+  padding-top: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: right;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.sw-table thead th i {
+  display: inline-block;
+  width: 0.75rem;
+  height: 3px;
+  margin-right: 0.4rem;
+  border-radius: 2px;
+  vertical-align: 0.2em;
+}
+
+.sw-table i[data-tone="from"] { background: #898781; }
+.sw-table i[data-tone="to"] { background: #2a78d6; }
+
+.sw-table tbody th {
+  padding-right: 1rem;
+  font-weight: 400;
+  text-align: left;
+  color: var(--color-muted);
+}
+
+.sw-table td {
+  padding-left: 0.75rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.sw-table td:nth-of-type(2) {
+  font-weight: 650;
+}
+
+.sw-table td:last-child {
+  color: var(--color-ink);
+  font-weight: 650;
+}
+
+.sw-table tbody tr:last-child th,
+.sw-table tbody tr:last-child td {
+  box-shadow: none;
+}
+
+.sw-compare-note {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+/* ---- The list of vaults, in a dialog ---- */
+
+.sw-dialog {
+  width: min(28rem, calc(100vw - 2rem));
+  max-width: none;
+  height: min(40rem, calc(100dvh - 4rem));
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 1.5rem;
+  background: #ffffff;
+  color: var(--color-ink);
+  box-shadow: 0 32px 64px -24px rgb(11 11 12 / 0.4);
+}
+
+.sw-dialog::backdrop {
+  background: rgb(11 11 12 / 0.32);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+.sw-dialog[open] {
+  animation: sw-dialog-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes sw-dialog-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+}
+
+.sw-dialog-body {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  height: 100%;
+}
+
+.sw-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.15rem 1.15rem 0.75rem 1.4rem;
+}
+
+.sw-dialog-title {
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.sw-dialog-close {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.sw-dialog-close:hover {
+  background: rgb(11 11 12 / 0.05);
+  color: var(--color-ink);
+}
+
+.sw-dialog-close svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.sw-search {
+  flex: none;
+  height: 2.75rem;
+  margin: 0 1.15rem 0.5rem;
+  font-family: var(--font-sans);
+  font-variation-settings: normal;
+  font-size: 0.875rem;
+}
+
+.sw-list {
+  overflow-y: auto;
+  padding: 0.25rem 0.6rem 0.75rem;
+  overscroll-behavior: contain;
+}
+
+.sw-list-title {
+  padding: 0.75rem 0.8rem 0.35rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-muted);
+}
+
+.sw-list-empty {
+  padding: 2rem 1rem;
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.sw-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.sw-row .sw-vmark {
+  width: 2rem;
+  height: 2rem;
+}
+
+.sw-row:hover:not(:disabled) {
+  background: #f7f6f2;
+}
+
+.sw-row[aria-current="true"] {
+  background: #f1f0eb;
+  box-shadow: inset 0 0 0 1px rgb(11 11 12 / 0.08);
+}
+
+.sw-row:disabled {
+  cursor: default;
+}
+
+.sw-row:disabled > :not(.sw-row-text),
+.sw-row:disabled .sw-row-name,
+.sw-row:disabled .sw-row-sub {
+  opacity: 0.5;
+}
+
+.sw-row-text {
+  display: grid;
+  gap: 0.05rem;
+  min-width: 0;
+}
+
+.sw-row-name {
+  overflow: hidden;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sw-row-sub,
+.sw-row-held,
+.sw-row-warn {
+  overflow: hidden;
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-muted);
+}
+
+.sw-row-held {
+  color: var(--color-ink);
+}
+
+.sw-row-warn {
+  color: #8a5a12;
+}
+
+.sw-row-apy {
+  display: grid;
+  justify-items: end;
+  font-size: 0.875rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.sw-row-delta {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+/* ---- /morpho on narrower screens ---- */
+
+@media (max-width: 1023px) {
+  .sw-tool {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 40rem;
+  }
+
+  .sw-card {
+    position: static;
+  }
+}
+
+@media (max-width: 719px) {
+  .sw-card { padding: 1rem 1rem 1.15rem; border-radius: 1.25rem; }
+  .sw-compare { padding: 1.15rem 1.1rem 1.1rem; border-radius: 1.25rem; }
+  .sw-amount:not([data-long]) { font-size: 1.5rem; }
+  .sw-vbutton { max-width: 64%; }
+  .sw-table { font-size: 0.75rem; }
+  .sw-table td { padding-left: 0.5rem; }
+  .sw-table tbody th { padding-right: 0.5rem; }
+
+  /* The list rises from the bottom, like a sheet. */
+  .sw-dialog {
+    width: 100vw;
+    height: min(36rem, calc(100dvh - 3rem));
+    margin: auto 0 0;
+    border-radius: 1.25rem 1.25rem 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sw-dialog[open] { animation: none; }
+  .sw-flip:hover:not(:disabled) { transform: translate(-50%, -50%); }
 }
 
 /* ---- Docs --------------------------------------------------------------------------------------

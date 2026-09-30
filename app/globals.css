@@ -1710,7 +1710,8 @@ body {
  * It hangs 0.07em past each side without moving the word; what follows gets 0.02em of room.
  */
 .story-scene h2 mark,
-.verify-title mark {
+.verify-title mark,
+.bitso-flow mark {
   position: relative;
   z-index: 0;
   margin: 0 0.02em 0 -0.07em;
@@ -1720,7 +1721,8 @@ body {
 }
 
 .story-scene h2 mark::before,
-.verify-title mark::before {
+.verify-title mark::before,
+.bitso-flow mark::before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -4236,6 +4238,720 @@ img.dbg-mark[src*="spark"] {
   .ad-bar::before {
     transition: none;
   }
+}
+
+/* ---- /bitso: Bitso's vault and MXNB market as one executable address ------------------------
+ * The header, like the verify section's: the claim on the left, what it means and Morpho's rates on
+ * the right. Below, the tool: a white card that makes and follows the address, beside a dark window
+ * showing what sending to it does, call by call, in the debugger's colours.
+ * ------------------------------------------------------------------------------------------- */
+
+.bitso-inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* The window's glow reaches past the column; clipped, not scrolled, so the card can still stick. */
+.bitso-top {
+  overflow-x: clip;
+  padding: clamp(2rem, 7vh, 4.5rem) 0 clamp(2.5rem, 7vh, 4.5rem);
+}
+
+.bitso-head {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+/* The flow, token by token, read as a sentence: USDC → bitusdcp → MXNB, all in one transfer. */
+.bitso-flow {
+  font-size: clamp(1.625rem, 3.4vw, 2.75rem);
+  font-weight: 650;
+  font-variation-settings: "wdth" 104;
+  line-height: 1.24;
+  letter-spacing: -0.03em;
+}
+
+.bitso-flow-line {
+  display: block;
+  text-wrap: balance;
+}
+
+/* A token's mark and symbol stay together. */
+.bitso-token {
+  white-space: nowrap;
+}
+
+.bitso-token-mark,
+.bitso-mark {
+  display: inline-grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.bitso-token-mark {
+  width: 1em;
+  height: 1em;
+  margin-right: 0.24em;
+  vertical-align: -0.14em;
+  box-shadow: 0 0 0 1px rgb(11 11 12 / 0.07);
+}
+
+.bitso-token-mark svg,
+.bitso-token-mark img,
+.bitso-mark svg,
+.bitso-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.bitso-arrow {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.54em;
+  margin: 0 0.14em 0 0.08em;
+  vertical-align: 0.1em;
+  color: #a4a39d;
+}
+
+.bitso-lede {
+  margin-top: 1.1rem;
+  font-size: clamp(1rem, 1.2vw, 1.1875rem);
+  line-height: 1.65;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+/* A logo set into the sentence, the size of its letters. */
+.bitso-mark {
+  width: 1.15em;
+  height: 1.15em;
+  margin: 0 0.2em 0 0.06em;
+  vertical-align: -0.24em;
+}
+
+/* Base's mark is a square; a circle would clip its corners. */
+.bitso-mark[data-of="base"] {
+  border-radius: 0;
+}
+
+/* A vault's name reads whole: "USDC-bitusdcp" never breaks at its hyphen. */
+.bitso-lede a {
+  white-space: nowrap;
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: rgb(11 11 12 / 0.25);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 150ms ease;
+}
+
+.bitso-lede a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Morpho's figures, each in a pill. */
+.bitso-rates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.4rem;
+}
+
+.bitso-rates > div {
+  padding: 0.55rem 0.9rem 0.6rem;
+  border-radius: 0.9rem;
+  background: rgb(255 255 255 / 0.72);
+  box-shadow:
+    inset 0 0 0 1px rgb(11 11 12 / 0.08),
+    0 1px 2px rgb(11 11 12 / 0.04);
+}
+
+.bitso-rates dt {
+  font-size: 0.6875rem;
+  color: var(--color-muted);
+}
+
+.bitso-rates dd {
+  margin-top: 0.1rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- The tool: the card, and the terms beside it ---- */
+
+.bitso-tool {
+  display: grid;
+  grid-template-columns: minmax(0, 27rem) minmax(0, 1fr);
+  align-items: start;
+  gap: 2rem;
+}
+
+.bitso-card {
+  position: sticky;
+  top: 5.5rem;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  background: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px rgb(11 11 12 / 0.06),
+    0 1px 2px rgb(11 11 12 / 0.04),
+    0 24px 48px -36px rgb(11 11 12 / 0.35);
+}
+
+/* One column that can shrink below its fields' intrinsic widths: the amount field alone asks for ~330px. */
+.bitso-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.bitso-label {
+  margin: 0 0 0.5rem 0.2rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.bitso-form .bitso-label:not(:first-child) {
+  margin-top: 1.25rem;
+}
+
+.bitso-form .input {
+  height: 3rem;
+  padding: 0 1.15rem;
+}
+
+.bitso-note {
+  margin-top: 0.55rem;
+  padding-left: 0.2rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+.bitso-note[data-tone="warn"] {
+  color: #8a5a12;
+}
+
+.bitso-note strong {
+  font-weight: 650;
+  color: inherit;
+}
+
+.bitso-note a {
+  white-space: nowrap;
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: rgb(11 11 12 / 0.25);
+  text-underline-offset: 2px;
+  transition: text-decoration-color 150ms ease;
+}
+
+.bitso-note a:hover {
+  text-decoration-color: currentColor;
+}
+
+.bitso-note-center {
+  padding-left: 0;
+  text-align: center;
+}
+
+.bitso-amount-field {
+  position: relative;
+  display: flex;
+}
+
+.bitso-form .bitso-amount-field .input {
+  padding-right: 6.5rem;
+  font-family: var(--font-sans);
+  font-variation-settings: normal;
+  font-size: 1.125rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bitso-amount-unit {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2rem;
+  padding: 0 0.75rem 0 0.4rem;
+  border-radius: 999px;
+  background: var(--color-paper);
+  font-size: 0.8125rem;
+  font-weight: 650;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.bitso-amount-unit svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.bitso-submit {
+  width: 100%;
+  height: 3rem;
+  margin-top: 1.5rem;
+  font-size: 0.9375rem;
+}
+
+/* ---- Paying the address ---- */
+
+.bitso-pay {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.bitso-pay-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.bitso-pay-status code {
+  font-family: var(--font-recursive), ui-monospace, monospace;
+  font-variation-settings: "MONO" 1, "CASL" 0, "wght" 450, "slnt" 0, "CRSV" 0;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.bitso-pay .ad-alarm {
+  margin: 0 0 1.25rem;
+}
+
+.bitso-scan {
+  display: grid;
+  grid-template-columns: 9.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 1.1rem;
+  margin-bottom: 1.35rem;
+}
+
+.bitso-qr {
+  padding: 0.5rem;
+  border-radius: 1rem;
+  box-shadow: inset 0 0 0 1px rgb(11 11 12 / 0.08);
+}
+
+.bitso-qr > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.bitso-scan-text {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.bitso-scan-text .bitso-note {
+  margin: 0;
+  padding: 0;
+}
+
+.bitso-switch {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  text-align: left;
+  color: var(--color-muted);
+  text-decoration: underline;
+  text-decoration-color: rgb(11 11 12 / 0.25);
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    text-decoration-color 150ms ease;
+}
+
+.bitso-switch:hover {
+  color: var(--color-ink);
+  text-decoration-color: currentColor;
+}
+
+.bitso-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.6rem;
+  margin-bottom: 1.1rem;
+}
+
+.bitso-value-amount {
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-variation-settings: "wdth" 104;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bitso-value-chain {
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+}
+
+.bitso-value .btn {
+  align-self: center;
+  margin-left: auto;
+}
+
+.bitso-address {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.4rem 0.4rem 0.9rem;
+  border-radius: 0.9rem;
+  background: #f7f6f2;
+  box-shadow: inset 0 0 0 1px rgb(11 11 12 / 0.06);
+}
+
+.bitso-address code {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-recursive), ui-monospace, monospace;
+  font-variation-settings: "MONO" 1, "CASL" 0, "wght" 450, "slnt" 0, "CRSV" 0;
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+.bitso-steps {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1.4rem;
+  list-style: none;
+}
+
+/* Once paid, the steps follow the status straight away. */
+.bitso-pay-status + .bitso-steps {
+  margin-top: 0;
+}
+
+.bitso-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  color: var(--color-muted);
+}
+
+.bitso-step-dot {
+  position: relative;
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-top: 0.42rem;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px rgb(11 11 12 / 0.25);
+}
+
+.bitso-step[data-stage="done"] .bitso-step-dot { background: #1f9d55; box-shadow: none; }
+.bitso-step[data-stage="on"] .bitso-step-dot { background: #2f6fe4; box-shadow: none; }
+.bitso-step[data-stage="bad"] .bitso-step-dot { background: #d92d20; box-shadow: none; }
+
+.bitso-step[data-stage="on"] .bitso-step-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: inherit;
+  animation: status-ping 1.6s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
+}
+
+.bitso-step-text {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.bitso-step-label {
+  font-size: 0.9375rem;
+}
+
+.bitso-step[data-stage] .bitso-step-label { color: var(--color-ink); }
+.bitso-step[data-stage="on"] .bitso-step-label { font-weight: 600; }
+.bitso-step[data-stage="bad"] .bitso-step-label { color: #a4221a; }
+
+.bitso-step-detail {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+  overflow-wrap: anywhere;
+}
+
+.bitso-step-detail a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: rgb(11 11 12 / 0.25);
+  text-underline-offset: 3px;
+}
+
+.bitso-risk {
+  margin-top: 1.1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.9rem;
+  background: #fbf6ea;
+  color: #6f4b10;
+}
+
+.bitso-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.35rem;
+}
+
+/* Start over, as its icon alone. */
+.bitso-redo {
+  width: 2rem;
+  padding: 0;
+}
+
+/* ---- The terms: what sending does, in the debugger's window ---- */
+
+.bitso-terms {
+  position: relative;
+  isolation: isolate;
+}
+
+/* The glow stays behind the window, and its shadow short, so neither falls on the text below. */
+.bitso-terms .dbg-aura {
+  inset: -5% -4% 6%;
+  opacity: 0.42;
+}
+
+.bitso-window {
+  font-size: 0.875rem;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.07),
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    0 24px 48px -28px rgb(11 11 12 / 0.5);
+}
+
+.bitso-window-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.4rem;
+  background: #08080a;
+  box-shadow: inset 0 -1px 0 var(--v-line);
+  font-size: 0.875rem;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+}
+
+.bitso-window-chain,
+.bitso-n,
+.bitso-fn,
+.bitso-arg dt,
+.bitso-proof-address {
+  font-family: var(--font-recursive), ui-monospace, monospace;
+  font-variation-settings: var(--v-mono);
+}
+
+.bitso-window-chain {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: normal;
+  color: var(--v-dim);
+}
+
+.bitso-window-chain .dbg-mark {
+  width: 1rem;
+  height: 1rem;
+}
+
+.bitso-calls {
+  padding: 0 1.4rem;
+  list-style: none;
+}
+
+.bitso-call {
+  padding: 1.15rem 0 1.25rem;
+  box-shadow: inset 0 -1px 0 var(--v-line);
+}
+
+.bitso-call-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.bitso-n {
+  font-size: 0.6875rem;
+  color: var(--v-faint);
+}
+
+.bitso-fn {
+  font-size: 0.875rem;
+  color: var(--v-fg);
+}
+
+.bitso-fn b {
+  font-weight: normal;
+  color: var(--v-ink);
+}
+
+.bitso-why {
+  margin: 0.35rem 0 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--v-dim);
+}
+
+.bitso-call-head + .bitso-why {
+  padding-left: calc(0.6rem + 1.25rem + 0.6rem + 1.1ch);
+}
+
+.bitso-args {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.bitso-call > .bitso-args,
+.bitso-call > .bitso-inner-calls {
+  margin-left: calc(0.6rem + 1.25rem + 0.6rem + 1.1ch);
+}
+
+.bitso-arg {
+  display: grid;
+  grid-template-columns: 9.75rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 1.5rem;
+}
+
+.bitso-arg dt {
+  overflow: hidden;
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--v-faint);
+}
+
+.bitso-arg dd {
+  min-width: 0;
+  color: var(--v-fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.bitso-who {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: 100%;
+  min-width: 0;
+  vertical-align: middle;
+}
+
+.bitso-who-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bitso-who-sub {
+  flex: none;
+  font-size: 0.75rem;
+  color: var(--v-dim);
+}
+
+/* A value that comes later: where it will come from, faintly. */
+.bitso-later {
+  color: var(--v-faint);
+}
+
+.bitso-inner-calls {
+  display: grid;
+  gap: 1.1rem;
+  padding: 0.2rem 0 0.1rem 1rem;
+  list-style: none;
+  box-shadow: inset 1px 0 0 rgb(255 255 255 / 0.12);
+}
+
+.bitso-inner-calls .bitso-fn {
+  color: var(--v-ink);
+}
+
+.bitso-inner-calls .bitso-why {
+  margin-top: 0.2rem;
+}
+
+.bitso-rest {
+  padding: 1.15rem 1.4rem 1.25rem;
+}
+
+.bitso-proof {
+  display: grid;
+  gap: 0.3rem;
+  padding: 1rem 1.4rem 1.15rem;
+  background: #08080a;
+  box-shadow: inset 0 1px 0 var(--v-line);
+}
+
+.bitso-proof-address {
+  font-size: 0.8125rem;
+  color: var(--v-fg);
+  overflow-wrap: anywhere;
+}
+
+.bitso-proof-verdict {
+  font-size: 0.8125rem;
+  color: var(--v-dim);
+}
+
+.bitso-proof[data-verdict="ok"] .bitso-proof-verdict { color: var(--v-ok); }
+.bitso-proof[data-verdict="bad"] .bitso-proof-verdict { color: var(--v-bad); }
+
+.bitso-fine {
+  max-width: 48rem;
+  margin-top: 3rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* ---- /bitso on narrower screens ---- */
+
+@media (max-width: 1023px) {
+  .bitso-tool {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 40rem;
+  }
+
+  .bitso-card {
+    position: static;
+  }
+}
+
+@media (max-width: 719px) {
+  .bitso-inner { padding: 0 1rem; }
+  .bitso-rates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem; }
+  .bitso-rates > div { padding: 0.5rem 0.65rem 0.55rem; }
+  .bitso-rates dt { font-size: 0.625rem; }
+  .bitso-rates dd { font-size: 0.8125rem; }
+  .bitso-card { padding: 1.15rem; border-radius: 1.25rem; }
+  .bitso-scan { grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0.9rem; }
+  .bitso-window-bar { padding: 0.9rem 1rem; }
+  .bitso-calls { padding: 0 1rem; }
+  .bitso-call > .bitso-args,
+  .bitso-call > .bitso-inner-calls { margin-left: 0; }
+  .bitso-call-head + .bitso-why { padding-left: 0; }
+  .bitso-inner-calls { padding-left: 0.85rem; }
+  .bitso-arg { grid-template-columns: minmax(0, 1fr); gap: 0.1rem; }
+  .bitso-rest, .bitso-proof { padding-inline: 1rem; }
 }
 
 /* ---- Docs --------------------------------------------------------------------------------------

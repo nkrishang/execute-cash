@@ -8,3 +8,6 @@ export const executeApiUrl = (process.env.EXECUTE_API_URL ?? "https://api.execut
  * demo says it isn't set up here, and nothing else changes.
  */
 export const demoApiKey = process.env.EXECUTE_DEMO_API_KEY ?? "";
+
+/** A Base JSON-RPC endpoint, for /bitso's quotes and positions. Default: Base's public one, which is rate limited. */
+export const baseRpcUrl = process.env.BASE_RPC_URL || "https://mainnet.base.org";

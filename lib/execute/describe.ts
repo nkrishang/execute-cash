@@ -1,3 +1,4 @@
+import { VAULT, readBitsoIntent } from "@/lib/bitso";
 import { functionItem } from "./derive";
 import { chainName, formatAmount, short, tokenOf } from "./format";
 import { knownContract, type Known, type Theme } from "./known";
@@ -38,6 +39,19 @@ export function describe(exe: ExecutableAddress, chains: Chain[]): Story {
   const { intent } = exe;
   const token = tokenOf(chains, intent.chainId, intent.token);
   const functions = intent.calls.map((c) => functionItem(c.function).name);
+  const money = {
+    token,
+    amount: token ? formatAmount(intent.amount, token.decimals) : intent.amount,
+    symbol: token?.symbol ?? short(intent.token),
+    decimals: token?.decimals ?? null,
+    chain: chainName(intent.chainId),
+  };
+
+  // /bitso's addresses run through Morpho's bundler, whose multicall says nothing; say what it does.
+  if (readBitsoIntent(intent)) {
+    const vault = knownContract(chains, intent.chainId, VAULT);
+    return { ...money, verb: "deposits into", object: "Bitso USDC Prime, as collateral for MXNB", main: vault, theme: vault?.protocol?.theme, functions };
+  }
 
   const index = functions.findLastIndex((f) => !SETUP.has(f));
   const i = index < 0 ? functions.length - 1 : index;
@@ -58,11 +72,7 @@ export function describe(exe: ExecutableAddress, chains: Chain[]): Story {
   }
 
   return {
-    token,
-    amount: token ? formatAmount(intent.amount, token.decimals) : intent.amount,
-    symbol: token?.symbol ?? short(intent.token),
-    decimals: token?.decimals ?? null,
-    chain: chainName(intent.chainId),
+    ...money,
     verb,
     object,
     main,

@@ -1,0 +1,1 @@
+Execute. “USDC → bitusdcp → MXNB ready to borrow, all in one transfer,” each token beside its logo. Beside it, what sending does: USDC goes to Morpho’s GeneralAdapter1, then Morpho’s Bundler3 deposits it into Bitso USDC Prime and posts the shares as collateral in the bitusdcp / MXNB market on behalf of your wallet. No wallet connection. No approvals.

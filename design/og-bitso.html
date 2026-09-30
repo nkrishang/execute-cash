@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1200" />
+<title>Execute: /bitso Open Graph image</title>
+<!--
+  Source of app/bitso/opengraph-image.png (1200×630).
+
+  /bitso's header, composed for a link card: the token flow with each token's mark and "one transfer"
+  knocked out, as on the page, beside the page's terms window cut down to the calls. Colours, axes and the window's
+  palette come from app/globals.css (`.bitso-*`, `.dbg-*`), the mark from components/logo.tsx, the
+  calls from lib/bitso.ts.
+
+  Render, from the project root (needs Chrome, and network for the two Google Fonts families):
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars \
+    --window-size=1200,630 --force-device-scale-factor=1 --virtual-time-budget=20000 \
+    --screenshot=app/bitso/opengraph-image.png design/og-bitso.html
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&display=block"
+/>
+<style>
+  :root {
+    --paper: #f3f2ee;
+    --ink: #0b0b0c;
+    --muted: #6b6a66;
+    /* The debugger's palette (.dbg-theme), Morpho's blue. */
+    --v-a: #2470ff;
+    --v-b: #7fb0ff;
+    --v-ink: #8fb4ff;
+    --v-ok: #3ddc84;
+    --v-fg: #f3f2ee;
+    --v-dim: rgb(243 242 238 / 0.52);
+    --v-faint: rgb(243 242 238 / 0.3);
+    --v-line: rgb(255 255 255 / 0.07);
+    --mono: "MONO" 1, "CASL" 0, "wght" 430, "slnt" 0, "CRSV" 0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+
+  body {
+    position: relative;
+    font-family: Archivo, ui-sans-serif, system-ui, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    background:
+      radial-gradient(1040px 560px at 50% -18%, #ffffff 0%, rgb(255 255 255 / 0) 62%),
+      var(--paper);
+  }
+
+  /* ---- Bar: the navbar's brand ---- */
+
+  .bar {
+    position: absolute;
+    top: 46px;
+    left: 64px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo { height: 34px; width: auto; }
+  .wordmark {
+    font-size: 30px;
+    font-weight: 760;
+    font-variation-settings: "wdth" 110;
+    letter-spacing: -0.035em;
+  }
+
+  /* ---- The claim ---- */
+
+  .claim {
+    position: absolute;
+    left: 64px;
+    top: 150px;
+    width: 600px;
+  }
+
+  /* The header's flow (`.bitso-flow`): each token's mark, then its symbol. */
+  h1 {
+    font-size: 48px;
+    font-weight: 650;
+    font-variation-settings: "wdth" 104;
+    line-height: 1.26;
+    letter-spacing: -0.03em;
+  }
+  h1 .line { display: block; white-space: nowrap; }
+  .token { white-space: nowrap; }
+  .token-mark {
+    display: inline-grid;
+    width: 1em;
+    height: 1em;
+    margin-right: 0.24em;
+    overflow: hidden;
+    border-radius: 50%;
+    vertical-align: -0.14em;
+    box-shadow: 0 0 0 1px rgb(11 11 12 / 0.07);
+  }
+  .token-mark svg, .token-mark img { display: block; width: 100%; height: 100%; }
+  .arrow { display: inline-block; width: 0.8em; height: 0.54em; margin: 0 0.14em 0 0.08em; vertical-align: 0.1em; color: #a4a39d; }
+
+  /* The knockout, as `.bitso-flow mark`. */
+  mark {
+    position: relative;
+    z-index: 0;
+    margin: 0 0.02em 0 -0.07em;
+    padding: 0 0.07em;
+    background: none;
+    color: var(--paper);
+  }
+  mark::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0.106em 0 0.138em;
+    background: var(--ink);
+  }
+
+  .sub {
+    margin-top: 30px;
+    max-width: 580px;
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+  .sub b { font-weight: 600; color: var(--ink); }
+
+  /* ---- The terms window ---- */
+
+  .terms {
+    position: absolute;
+    top: 118px;
+    right: 64px;
+    width: 428px;
+    isolation: isolate;
+  }
+
+  .aura {
+    position: absolute;
+    inset: -12% -10% -14%;
+    z-index: -1;
+    opacity: 0.5;
+  }
+  .aura i { position: absolute; border-radius: 50%; }
+  .aura i:nth-child(1) { left: -6%; top: 10%; width: 60%; height: 84%; background: radial-gradient(closest-side, var(--v-a), transparent); }
+  .aura i:nth-child(2) { right: -6%; top: -4%; width: 56%; height: 88%; background: radial-gradient(closest-side, var(--v-b), transparent); }
+  .aura i:nth-child(3) { left: 26%; bottom: -10%; width: 52%; height: 58%; background: radial-gradient(closest-side, rgb(36 112 255 / 0.7), transparent); }
+
+  .window {
+    overflow: hidden;
+    border-radius: 26px;
+    background: #0c0c0e;
+    color: var(--v-fg);
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.07),
+      inset 0 1px 0 rgb(255 255 255 / 0.12),
+      0 60px 100px -50px rgb(11 11 12 / 0.65),
+      0 26px 50px -28px rgb(11 11 12 / 0.45);
+  }
+
+  .window-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 26px;
+    background: #08080a;
+    box-shadow: inset 0 -1px 0 var(--v-line);
+    font-size: 19px;
+    font-weight: 650;
+    letter-spacing: -0.005em;
+  }
+
+  .mono { font-family: Recursive, ui-monospace, monospace; font-variation-settings: var(--mono); }
+
+  .chain { display: inline-flex; align-items: center; gap: 9px; font-size: 16px; font-weight: normal; color: var(--v-dim); }
+  .base { width: 17px; height: 17px; border-radius: 3px; background: #0000ff; }
+
+  .calls { padding: 8px 26px 4px; list-style: none; }
+  .call { padding: 16px 0 18px; box-shadow: inset 0 -1px 0 var(--v-line); }
+  .call:last-child { box-shadow: none; }
+  .head { display: flex; align-items: center; gap: 11px; font-size: 20px; }
+  .n { font-size: 14px; color: var(--v-faint); }
+  .head b { font-weight: normal; color: var(--v-ink); }
+
+  .mark { flex: none; width: 24px; height: 24px; border-radius: 50%; }
+  .mark svg, .mark img { display: block; width: 100%; height: 100%; }
+  .you { background: linear-gradient(135deg, hsl(290 78% 64%), hsl(20 82% 58%)); }
+
+  .rows { margin: 10px 0 0 49px; display: grid; gap: 9px; }
+  .inner { margin: 12px 0 0 49px; padding-left: 16px; display: grid; gap: 12px; box-shadow: inset 1px 0 0 rgb(255 255 255 / 0.12); }
+  .inner .fn { font-size: 18px; color: var(--v-ink); }
+  .inner .rows { margin: 7px 0 0; }
+
+  .row { display: grid; grid-template-columns: 104px 1fr; align-items: center; gap: 12px; font-size: 18px; }
+  .row .k { font-size: 14px; color: var(--v-faint); }
+  .row .v { display: inline-flex; align-items: center; gap: 9px; white-space: nowrap; }
+  .row .v small { font-size: 14px; color: var(--v-dim); }
+
+  .proof {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 26px 17px;
+    background: #08080a;
+    box-shadow: inset 0 1px 0 var(--v-line);
+    font-size: 16px;
+    color: var(--v-ok);
+  }
+  .proof svg { width: 18px; height: 18px; }
+</style>
+</head>
+<body>
+  <header class="bar">
+    <svg class="logo" viewBox="47.9 414.38 1134.66 454.19" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M 695.5 414.7 C 668.7 416.5, 647.4 421, 627.3 429 C 600.3 439.8, 587.7 448.2, 527 495.9 C 521.2 500.4, 506.8 511.7, 495 520.8 C 458 549.6, 454.8 552, 454 552 C 453.7 552, 451.8 549.2, 449.9 545.8 C 447.9 542.3, 441.3 530.7, 435 520 C 428.8 509.3, 421.3 496.4, 418.5 491.5 C 415.7 486.6, 410.1 476.9, 406.1 470 C 402.1 463.1, 395.5 451.6, 391.3 444.5 C 387.2 437.4, 383.3 430.7, 382.6 429.7 C 381.3 428.1, 375.4 428, 277.1 428.2 L 173 428.5 178.1 437 C 180.9 441.7, 188.6 453.9, 195.2 464.2 C 201.7 474.5, 208.6 485.6, 210.4 488.7 C 212.2 491.9, 218.9 502.6, 225.3 512.5 C 231.7 522.4, 239.1 534.1, 241.8 538.5 C 249.4 551, 274 590.2, 276.3 593.4 C 278.1 596, 289.2 614.2, 305.2 640.7 C 307.9 645.2, 309.9 649.4, 309.5 650 C 309.2 650.5, 304.3 654.7, 298.7 659.2 C 283.9 671.1, 247 701.5, 236.5 710.4 C 227.7 717.9, 215.5 728, 202 739 C 198.3 742, 187.5 751, 177.9 759 C 156.2 777.2, 113.8 812.3, 106.1 818.5 C 102 821.8, 71 847.6, 58.4 858.2 C 53.9 862, 49.7 865.7, 49 866.5 C 47.9 867.8, 58.8 868, 142.6 868 L 237.5 868 244.1 862.7 C 247.7 859.9, 257.7 851.9, 266.4 845 C 275.2 838.1, 289.1 827.1, 297.4 820.5 C 305.7 813.9, 323.1 800.2, 336 790 C 348.9 779.8, 364.8 767.1, 371.4 761.8 C 383.2 752.3, 383.5 752.1, 385 754.2 C 388 758.3, 422.9 815, 446 853.4 L 454.5 867.5 556.3 867.8 C 612.2 867.9, 658 867.7, 658 867.3 C 658 866.9, 656.2 863.7, 654 860.1 C 649.4 852.6, 590.8 762.8, 586 756 C 582.9 751.4, 545.8 695.3, 527.2 666.9 C 521.6 658.3, 517 650.9, 517 650.3 C 517 649.4, 532.8 637.4, 556 620.7 C 559.6 618.1, 567.2 612.6, 573 608.4 C 586.9 598.2, 604.7 585.4, 625.5 570.5 C 634.9 563.8, 648.1 554.3, 655 549.3 C 676.9 533.5, 691.5 526.3, 712.5 520.8 L 721.5 518.5 848 518.5 L 974.5 518.5 983.9 520.9 C 1009.9 527.4, 1028.4 543.9, 1034.6 566 C 1036.8 573.8, 1037.8 599.8, 1035.9 600.5 C 1035.1 600.8, 959.3 601.1, 867.4 601.3 L 700.3 601.5 695.8 606.5 C 666.9 639, 651.3 662.3, 640.5 689 C 632.2 709.5, 628.8 726.4, 628.9 746.8 C 628.9 789.9, 647.8 824.6, 683.1 846.8 C 696.3 855.1, 718.3 863, 737.1 866.1 C 747.5 867.8, 888.4 868.6, 910.9 867.1 C 954.3 864.1, 993.7 853.8, 1030 835.9 C 1071.7 815.3, 1101.8 791, 1125 759.1 C 1135.4 744.8, 1144.8 728.5, 1143.5 727.2 C 1142.7 726.4, 999.5 726.2, 996.3 727 C 995.2 727.3, 992.2 730.2, 989.7 733.5 C 973.3 755.6, 947.7 771, 916.8 777.2 C 906 779.4, 903.5 779.5, 858.5 779.5 C 805.9 779.5, 803.2 779.2, 788.9 772.4 C 774.8 765.6, 765.6 756.3, 760.3 743.4 C 753.9 727.6, 755.5 704.8, 764.5 684.5 L 766.7 679.4 961.6 679.6 C 1068.8 679.7, 1158.1 679.5, 1160 679.1 C 1163.4 678.4, 1163.5 678.3, 1167.2 666.2 C 1177.2 633.4, 1182.6 592.2, 1180 566.5 C 1177.1 536.6, 1170 514.3, 1155.9 491.3 C 1140.7 466.5, 1115.3 444, 1088.1 431.2 C 1071.6 423.5, 1061.1 420.3, 1039 416.3 C 1030.3 414.7, 1016.2 414.6, 865 414.4 C 774.5 414.4, 698.3 414.5, 695.5 414.7" /></svg>
+    <span class="wordmark">execute</span>
+  </header>
+
+  <main class="claim">
+    <h1>
+      <span class="line"><span class="token"><span class="token-mark"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#2775ca" /><path d="M10.3 9.2a9.4 9.4 0 0 0 0 13.6M21.7 9.2a9.4 9.4 0 0 1 0 13.6" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" /><path d="M16 8.9v1.5m0 11.2v1.5m2.9-11a3.2 3.2 0 0 0-2.9-1.7c-1.8 0-3.1 1-3.1 2.4 0 3.3 6.3 1.8 6.3 5.1 0 1.4-1.4 2.5-3.2 2.5a3.4 3.4 0 0 1-3.1-1.8" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" /></svg></span>USDC</span> <svg class="arrow" viewBox="0 0 24 16"><path d="M2 8h19M15 2l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg> <span class="token"><span class="token-mark"><img src="../public/tokens/bitusdcp.svg" alt="" /></span>bitusdcp</span> <svg class="arrow" viewBox="0 0 24 16"><path d="M2 8h19M15 2l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+      <span class="line"><span class="token"><span class="token-mark"><img src="../public/tokens/mxnb.svg" alt="" /></span>MXNB</span> ready to borrow,</span>
+      <span class="line">all in <mark>one transfer</mark>.</span>
+    </h1>
+    <p class="sub">Send USDC on Base to an executable address that deposits it in <b>Bitso USDC Prime</b> and posts the shares as collateral, ready for you to borrow <b>MXNB</b>.</p>
+  </main>
+
+  <div class="terms">
+    <div class="aura" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="window">
+      <p class="window-bar"><span>What sending does</span><span class="chain mono"><span class="base"></span>Base</span></p>
+      <ol class="calls">
+        <li class="call">
+          <p class="head mono">
+            <span class="n">01</span>
+            <span class="mark"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#2775ca" /><path d="M10.3 9.2a9.4 9.4 0 0 0 0 13.6M21.7 9.2a9.4 9.4 0 0 1 0 13.6" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" /><path d="M16 8.9v1.5m0 11.2v1.5m2.9-11a3.2 3.2 0 0 0-2.9-1.7c-1.8 0-3.1 1-3.1 2.4 0 3.3 6.3 1.8 6.3 5.1 0 1.4-1.4 2.5-3.2 2.5a3.4 3.4 0 0 1-3.1-1.8" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" /></svg></span>
+            <span><b>USDC</b>.transfer</span>
+          </p>
+          <div class="rows">
+            <p class="row"><span class="k mono">to</span><span class="v"><span class="mark"><img src="../public/protocols/morpho.png" alt="" /></span>GeneralAdapter1</span></p>
+          </div>
+        </li>
+        <li class="call">
+          <p class="head mono">
+            <span class="n">02</span>
+            <span class="mark"><img src="../public/protocols/morpho.png" alt="" /></span>
+            <span><b>Bundler3</b>.multicall</span>
+          </p>
+          <div class="inner">
+            <div>
+              <p class="fn mono">erc4626Deposit</p>
+              <div class="rows">
+                <p class="row"><span class="k mono">vault</span><span class="v"><span class="mark"><img src="../public/protocols/morpho.png" alt="" /></span>Bitso USDC Prime</span></p>
+              </div>
+            </div>
+            <div>
+              <p class="fn mono">morphoSupplyCollateral</p>
+              <div class="rows">
+                <p class="row"><span class="k mono">marketParams</span><span class="v"><span class="mark"><img src="../public/protocols/morpho.png" alt="" /></span>bitusdcp / MXNB</span></p>
+                <p class="row"><span class="k mono">onBehalf</span><span class="v"><span class="mark you"></span>your wallet</span></p>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ol>
+      <p class="proof"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.8 8.4 2.7 2.6 5.7-6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>No wallet connection. No approvals.</p>
+    </div>
+  </div>
+</body>
+</html>

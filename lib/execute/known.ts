@@ -26,6 +26,22 @@ const PROTOCOLS: Record<number, Record<string, Known>> = {
       logo: { kind: "img", src: "/protocols/aave.svg" },
       protocol: { name: "Aave", theme: "aave" },
     },
+    // What /bitso's addresses call (lib/bitso.ts).
+    "0x39e18c066187c83e860801befe45ae8ecd021575": {
+      name: "Bitso USDC Prime",
+      logo: { kind: "img", src: "/protocols/morpho.png" },
+      protocol: { name: "Morpho", theme: "morpho" },
+    },
+    "0x6bfd8137e702540e7a42b74178a4a49ba43920c4": {
+      name: "Morpho Bundler3",
+      logo: { kind: "img", src: "/protocols/morpho.png" },
+      protocol: { name: "Morpho", theme: "morpho" },
+    },
+    "0xb98c948cfa24072e58935bc004a8a7b376ae746a": {
+      name: "Morpho GeneralAdapter1",
+      logo: { kind: "img", src: "/protocols/morpho.png" },
+      protocol: { name: "Morpho", theme: "morpho" },
+    },
   },
 };
 
